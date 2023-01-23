@@ -20,4 +20,5 @@ export type Restaurant = {
   rating: string;
   latitude: number;
   longitude: number;
+  location_id: string;
 };

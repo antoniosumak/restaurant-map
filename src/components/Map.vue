@@ -1,5 +1,5 @@
 <template>
-  <Sidebar v-if="isSidebarOpened" />
+  <Sidebar v-if="isSidebarOpened" :selected-restaurant="selectedRestaurant" />
   <loader v-if="isLoading && data.length" />
   <div class="w-screen h-screen" id="map"></div>
 </template>
@@ -20,6 +20,7 @@ export default defineComponent({
       markerService: {} as MarkerService,
       restaurantService: new RestaurantsService(),
       data: [] as Restaurant[],
+      selectedRestaurant: {} as Restaurant | null,
       isLoading: false,
       isSidebarOpened: false,
     };
@@ -59,11 +60,26 @@ export default defineComponent({
         if (!restaurant.latitude || !restaurant.longitude) {
           return;
         }
+
         this.markerService.addMarker({
           lat: Number(restaurant.latitude),
           lng: Number(restaurant.longitude),
+          additionalProperties: { id: restaurant.location_id },
+          eventHandlers: {
+            click: this.revealRestaurantDetails,
+          },
         });
       });
+    },
+
+    revealRestaurantDetails(event: L.LeafletEvent) {
+      const markerId = event.target.options.title;
+
+      this.selectedRestaurant =
+        this.data.find((restaurant) => restaurant.location_id === markerId) ||
+        null;
+
+      this.isSidebarOpened = true;
     },
   },
 });

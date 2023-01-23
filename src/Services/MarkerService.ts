@@ -8,15 +8,27 @@ export default class MarkerService {
     this.map = map;
   }
 
-  addMarker({ lat, lng }: MarkerProps) {
+  addMarker({ lat, lng, eventHandlers, additionalProperties }: MarkerProps) {
     this.group.addTo(this.map);
+
+    if (!additionalProperties.id) {
+      return;
+    }
 
     const latLng = L.latLng(lat, lng);
 
-    const marker = L.marker(latLng);
+    const marker = L.marker(latLng, {
+      title: additionalProperties.id,
+    });
 
     if (this.map.hasLayer(this.group)) {
       this.group.addLayer(marker);
+    }
+
+    if (eventHandlers) {
+      for (const event in eventHandlers) {
+        marker.on(event, eventHandlers[event]);
+      }
     }
   }
 
