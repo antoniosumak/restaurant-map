@@ -6,13 +6,13 @@
       alt="restaurant image"
     />
     <div class="px-4 py-2">
-      <h2 class="font-medium text-2xl">{{ selectedRestaurant.name }}</h2>
+      <h2 class="font-medium text-2xl">{{ selectedRestaurant?.name }}</h2>
       <div class="flex items-center gap-1 mt-2">
         <i class="pi pi-map-marker text-slate-500"></i>
-        <p class="text-xs text-slate-400">{{ selectedRestaurant.address }}</p>
+        <p class="text-xs text-slate-400">{{ selectedRestaurant?.address }}</p>
       </div>
       <p>
-        {{ selectedRestaurant.rating }} | {{ selectedRestaurant.price_level }}
+        {{ selectedRestaurant?.rating }} | {{ selectedRestaurant?.price_level }}
       </p>
     </div>
   </div>
@@ -25,7 +25,7 @@ export default defineComponent({
   components: {},
   props: {
     selectedRestaurant: {
-      type: Object as PropType<Restaurant>,
+      type: Object as PropType<Restaurant | null>,
       required: true,
     },
   },
